@@ -135,3 +135,26 @@ def test_offroad_transition_callback_runs_on_first_frame_even_without_toggle():
   ui_state._update_status()
 
   assert callback_count == 1
+
+
+# Review 3 Test Cases
+def test_status_not_updated_when_started_is_false():
+  ui_state.status = UIStatus.OVERRIDE
+  ui_state.started = False
+  ui_state._started_prev = False
+  ui_state.sm = FakeSubMaster(FakeSelfdriveState(enabled=True, state=State.enabled), updated=True)
+
+  ui_state._update_status()
+
+  assert ui_state.status == UIStatus.OVERRIDE
+
+
+def test_status_unchanged_when_selfdrive_state_not_updated():
+  ui_state.status = UIStatus.DISENGAGED
+  ui_state.started = True
+  ui_state._started_prev = True
+  ui_state.sm = FakeSubMaster(FakeSelfdriveState(enabled=True, state=State.enabled), updated=False)
+
+  ui_state._update_status()
+
+  assert ui_state.status == UIStatus.DISENGAGED

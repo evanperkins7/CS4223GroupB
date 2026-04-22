@@ -46,3 +46,15 @@ def test_nonexcluded_processes_have_segment_coverage():
 
     eligible = _eligible_segments_for_proc(cfg.proc_name)
     assert len(eligible) > 0, f"No eligible replay segments for process: {cfg.proc_name}"
+
+
+# Review 3 Test Cases
+def test_full_segment_processes_exist_in_configs():
+  proc_names = {cfg.proc_name for cfg in CONFIGS}
+  missing = FULL_SEGMENT_PROCS - proc_names
+
+  assert not missing, f"Missing expected full-segment process configs: {sorted(missing)}"
+
+
+def test_segments_have_unique_entries():
+  assert len(segments) == len(set(segments)), "Duplicate segment entries found"
