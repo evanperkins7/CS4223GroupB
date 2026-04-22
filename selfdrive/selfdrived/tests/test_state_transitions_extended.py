@@ -102,3 +102,20 @@ class TestStateMachineTransitionsExtended:
     assert enabled is False
     assert active is False
     assert ET.NO_ENTRY in self.state_machine.current_alert_types
+
+  # Review 3 Test Cases
+  def test_overriding_returns_to_enabled_when_override_clears(self):
+    self.state_machine.state = State.overriding
+    enabled, active = self._update()
+
+    assert self.state_machine.state == State.enabled
+    assert enabled is True
+    assert active is True
+
+  def test_disabled_with_pre_enable_without_enable_stays_disabled(self):
+    self.state_machine.state = State.disabled
+    enabled, active = self._update(ET.PRE_ENABLE)
+
+    assert self.state_machine.state == State.disabled
+    assert enabled is False
+    assert active is False
